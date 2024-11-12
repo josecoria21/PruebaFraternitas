@@ -6,8 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import dev.propoc.pruebafraternitas.databinding.FragmentCategoriesBinding
 import dev.propoc.pruebafraternitas.viewmodel.ChuckNorrisViewModel
+import kotlinx.coroutines.launch
 
 class CategoriesFragment : Fragment() {
 
@@ -25,11 +27,13 @@ class CategoriesFragment : Fragment() {
 
         val adapter = CategoriesAdapter()
         binding.reyclerView.adapter = adapter
-
-        viewModel.getCategories()
-        viewModel.categories.observe(viewLifecycleOwner) { categoryList ->
-            adapter.setData(categoryList.toList())
+        
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.categories.collect { categoryList ->
+                adapter.setData(categoryList)
+            }
         }
+        viewModel.getCategories()
 
         return binding.root
     }

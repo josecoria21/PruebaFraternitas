@@ -6,29 +6,31 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dev.propoc.pruebafraternitas.model.CategoryJoke
 import dev.propoc.pruebafraternitas.respository.Repository
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class ChuckNorrisViewModel: ViewModel() {
 
     private val repository = Repository()
 
-    private val _categories = MutableLiveData<List<String>>()
-    val categories: LiveData<List<String>> = _categories
+    private val _categories = MutableStateFlow<List<String>>(emptyList())
+    val categories: StateFlow<List<String>> = _categories
 
-    private val _isLoading = MutableLiveData<Boolean>()
-    val isLoading: LiveData<Boolean> = _isLoading
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading: StateFlow<Boolean> = _isLoading
 
-    private val _errorMessage = MutableLiveData<String?>()
-    val errorMessage: LiveData<String?> = _errorMessage
+    private val _errorMessage = MutableStateFlow<String?>(null)
+    val errorMessage: StateFlow<String?> = _errorMessage
 
-    val categoryJoke = MutableLiveData<CategoryJoke>()
+    val categoryJoke = MutableStateFlow<CategoryJoke?>(null)
 
     fun getCategories() {
         viewModelScope.launch {
             try {
                 _isLoading.value = true
                 val response = repository.getCategories()
-                _categories.postValue(response)
+                _categories.value = response
             } catch (e: Exception) {
                 _errorMessage.value = "Failed to load data: ${e.message}"
             } finally {
