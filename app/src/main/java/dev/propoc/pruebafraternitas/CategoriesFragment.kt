@@ -6,25 +6,27 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
 import dev.propoc.pruebafraternitas.databinding.FragmentCategoriesBinding
 import dev.propoc.pruebafraternitas.viewmodel.ChuckNorrisViewModel
 
 class CategoriesFragment : Fragment() {
+
+
+    private val viewModel: ChuckNorrisViewModel by viewModels()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         val binding = FragmentCategoriesBinding.inflate(inflater, container, false).apply {
+            this.viewModel = this@CategoriesFragment.viewModel
             lifecycleOwner = viewLifecycleOwner
         }
-
-        val viewModel: ChuckNorrisViewModel by viewModels()
 
         val adapter = CategoriesAdapter()
         binding.reyclerView.adapter = adapter
 
+        viewModel.getCategories()
         viewModel.categories.observe(viewLifecycleOwner) { categoryList ->
             adapter.setData(categoryList.toList())
         }
@@ -32,6 +34,4 @@ class CategoriesFragment : Fragment() {
         return binding.root
     }
 }
-pedro.torres@fraternitas.io
-pmpedrotorres@gmail.com
 

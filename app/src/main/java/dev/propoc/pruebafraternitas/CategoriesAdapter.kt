@@ -4,12 +4,11 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import dev.propoc.pruebafraternitas.databinding.CategoriesViewBinding
-import dev.propoc.pruebafraternitas.model.CategoriesModel
 
 class CategoriesAdapter : RecyclerView.Adapter<CategoriesAdapter.DataViewHolder>() {
-    private var items = listOf<CategoriesModel>()
+    private var items = listOf<String>()
 
-    fun setData(data: List<CategoriesModel>) {
+    fun setData(data: List<String>) {
         items = data
         notifyDataSetChanged()
     }
@@ -27,8 +26,8 @@ class CategoriesAdapter : RecyclerView.Adapter<CategoriesAdapter.DataViewHolder>
 
     inner class DataViewHolder(private val binding: CategoriesViewBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: CategoriesModel) {
-            binding.categoriesName.text = item.categories
+        fun bind(item: String) {
+            binding.categoriesName.text = item
             binding.executePendingBindings()
         }
     }
